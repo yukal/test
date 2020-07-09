@@ -17,13 +17,21 @@ const xmlData = `
 </DAT>
 `;
 
+function getSignatureOf(data, algo='sha1') {
+    return crypto.createHash(algo).update(data).digest('hex');
+}
+
 // Encode XML
 const xmlCanonical = xmlData.trim().replace(/(<.*?>)\s+/g, '$1');
 const xmlBase64 = Buffer.from(xmlCanonical).toString('base64');
 
 // Create signature
-const md5 = crypto.createHash('md5').update(xmlBase64).digest('hex');
-const xmlSignature = crypto.createHash('sha1').update(md5).digest('hex');
+const xmlSignature = getSignatureOf(xmlBase64);
 
-console.log('XML-Canonical:\n%s\n', xmlCanonical);
-console.log('XML-Base64:\n%s\n\nSignature:\n%s', xmlBase64, xmlSignature);
+console.log('XML CANONICAL:\n%s\n', xmlCanonical);
+console.log('XML BASE64:\n%s\n', xmlBase64);
+console.log('XML BASE64 SIGNATURE:');
+console.log('(md5)    %s', getSignatureOf(xmlBase64, 'md5'));
+console.log('(sha1)   %s', xmlSignature);
+console.log('(sha256) %s', getSignatureOf(xmlBase64, 'sha256'));
+console.log('(sha512) %s', getSignatureOf(xmlBase64, 'sha512'));
