@@ -2,7 +2,7 @@ const crypto = require('crypto');
 
 const date = new Date().toISOString().replace(/\D/g, '').substr(0, 14);
 
-// Should be coverted to cp1251
+// Should be converted to cp1251
 const xmlData = `
 <?xml version="1.0" encoding="windows-1251"?>
 <DAT FN="1234567890" TN="ПН 345612052809" ZN="АА57506761" DI="415" V="1">
@@ -18,7 +18,7 @@ const xmlData = `
 `;
 
 // Encode XML
-const xmlCanonical = xmlData.replace(/\s/g,'');
+const xmlCanonical = xmlData.replace(/(<.*?>)\s+/g, '$1');
 const xmlBase64 = Buffer.from(xmlCanonical).toString('base64');
 
 // Create signature
