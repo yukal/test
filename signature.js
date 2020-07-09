@@ -18,11 +18,12 @@ const xmlData = `
 `;
 
 // Encode XML
-const xmlCanonical = xmlData.replace(/(<.*?>)\s+/g, '$1');
+const xmlCanonical = xmlData.trim().replace(/(<.*?>)\s+/g, '$1');
 const xmlBase64 = Buffer.from(xmlCanonical).toString('base64');
 
 // Create signature
 const md5 = crypto.createHash('md5').update(xmlBase64).digest('hex');
 const xmlSignature = crypto.createHash('sha1').update(md5).digest('hex');
 
+console.log('XML-Canonical:\n%s\n', xmlCanonical);
 console.log('XML-Base64:\n%s\n\nSignature:\n%s', xmlBase64, xmlSignature);
